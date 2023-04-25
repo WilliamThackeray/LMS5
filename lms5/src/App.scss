@@ -1,0 +1,86 @@
+@import 'index.scss';
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+body a {
+  color: red;
+  text-decoration: none;
+}
+body a:hover {
+  color: rgb(188, 0, 0);
+  text-decoration: underline;
+}
+.navbar-brand {
+  max-width: 45%;
+}
+.navbar-brand img {
+  width: 100%;
+  height: auto;
+}
+.navbar {
+  background-image: url(../public/img/binhoBoard.webp);
+  background-color: #89939e6f;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 80%;
+}
+.navbar button {
+  font-size: 2.5rem;
+  color: white;
+}
+.navbar button:hover {
+  background-color: white;
+  color: black;
+}
+.bg-yellow {
+  background-color: #f0e249;
+}
+.bg-gray {
+  background-color: rgb(43, 43, 43);
+}
+.bg-lightgray {
+  background-color: rgb(232, 232, 232);
+}
+.main {
+  height: 100%;
+  margin: 0;
+}
+.aside li {
+  list-style-type: "🥅";
+}
+.navHomeBtn, .navTeamsBtn {
+  background-color: red;
+}
+.teamsBtn:hover {
+  cursor: pointer;
+}
+.teamsContent li span{
+  white-space: nowrap;
+}
+.trash, .cog {
+  height: 100%;
+  width: auto;
+  cursor: pointer;
+}
+.table tr:hover {
+  background-color: #ece8b8;
+}
+.news li:hover, .records li:hover {
+  border-radius: 3px;
+  border-top: solid 1px red;;
+  border-bottom: solid 1px red;;
+}
+.hide {
+  display: none;
+}
+.logo {
+  min-width: 350px;
+}
+.btn-primary {
+  background-color: #e6da57;
+  color: black;
+  border: solid 2px #a89f3d;
+}
