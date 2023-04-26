@@ -8,6 +8,7 @@ let AppViewModel = {
     entitySingle: "team",
     listTitle: "Bihño Teams",
     tableClasses: "table table-hover rounded m-2"
-  }
+  },
+  host: 'localhost:8080'
 }
 export default AppViewModel

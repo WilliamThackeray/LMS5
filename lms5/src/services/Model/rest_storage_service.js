@@ -1,6 +1,7 @@
 /* RestStorageService Class template*/
 /* Use this template as a starter and complete the items that say 'TODO' */
 import StorageService from '../../../../src/services/Model/storage_service.js'
+import AppViewModel from '../Model/appViewModel.meta.js'
 
 export default class RestStorageService extends StorageService {
     constructor(entity, entitySingle, options = {}, host) {
@@ -39,12 +40,8 @@ export default class RestStorageService extends StorageService {
 
     async read(id) {
         try{
-            //TODO:
-            let tempData = await this.list(this.model.options)
-            for (let item of tempData) {
-                if (item.id == id) return item
-            }
-            return null
+            const response = await fetch(`${this.apiUrl}/${id}`)
+            return await response.json()
         }
         catch(err){
             console.log(err);
@@ -55,36 +52,87 @@ export default class RestStorageService extends StorageService {
 
     async update(id, postData) {
         
-        //TODO:
         //Remember for update, you need to set the method to 'PUT' and headers to include
         //'Content-Type': 'application/json'
         //also remember to use JSON.stringify on the postData object before assigning to 'body'
-        
+        try {
+            const response = await fetch(`${this.apiUrl}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            }).then( out => out.json())
+            return response
+        }
+        catch(err) {
+            console.log(err)
+            return null
+        }
     }
 
     async create(postData) {
-        //TODO:
         //Remember for create, you need to set the method to 'POST' and headers to include
         //'Content-Type': 'application/json'
         //also remember to use JSON.stringify on the postData object before assigning to 'body'
+        try {
+            const response = await fetch(`${this.apiUrl}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            }).then( out => out.json())
+            return response
+        }
+        catch(err) {
+            console.log(err)
+            return null
+        }
        
     }
 
     async delete(id) {
-        //TODO:
-        
+        try  {
+            const response = await fetch(`${this.apiUrl}/${id}`, {
+                method: 'DELETE'
+            }).then( out => out.json())
+            return response
+        }
+        catch(err) {
+            console.log(err)
+            return null
+        }
     }
     
     async getLookup(lookupName){
         let url = `${this.hostPrefix}/lookups/${lookupName}`;
 
-        //TODO:
         //note that the lookup result is stored in:
         //super.lookups   (this is a getter in the super class, you must prefix with super...I know, dumb)
         //I would check if the lookupName is found in super.lookups first and return
         //otherwise, I would retrieve my lookup using the lookup api, then store in super.lookups
-        
+        try {
+            if (lookupName in super.lookups) {
+                return this.lookup(lookupName)
+            } else {
+                const response = await fetch(url)
+                super.lookups[lookupName] = await response.json()
+                return super.lookups[lookupName]
+            }
+        }
+        catch(err) {
+            console.log(err)
+            throw(err)
+        }
+    }
+
+    async reset() {
+        this.model.data = []
     }
     
 
+}
+export function getApi() {
+    return new RestStorageService(AppViewModel.list.entity, AppViewModel.list.entitySingle, {}, AppViewModel.host)
 }

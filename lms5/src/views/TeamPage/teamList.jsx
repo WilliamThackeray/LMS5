@@ -2,23 +2,32 @@ import SearchBar from './searchBar.jsx'
 import TeamsTable from './teamTable.jsx'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function TeamsList({ viewModel, model }) {
   const [filterText, setFilterText] = useState('')
   const [data, updateData] = useState(model.list())
+
+  async function fetchData() {
+    let teams = await model.list()
+    updateData(teams)
+  }
+  useEffect(() => {
+    fetchData()
+  },[])
+
   const [show, setShow] = useState(false)
   const [teamDelName, setTeamDelName] = useState('')
 
   function handleReset() {
     model.reset()
-    updateData(model.list())
+    fetchData()
   }
   function handleDelete(e) {
     let delID = e.target.closest('tr').id
     let delName = model.list()[model.getItemIndex(delID)].name
     model.delete(delID)
-    updateData(model.list())
+    fetchData()
     setShow(true)
     setTeamDelName(delName)
   }
@@ -30,12 +39,16 @@ export default function TeamsList({ viewModel, model }) {
 
     model.sortCol = col
     model.sort(model.sortCol, model.sortDir, true)
-    updateData(model.list())
+    fetchData()
   }
   function handleFilterChange(val) {
     model.filterStr = val
+    model.filerCol = value ? model.sortCol:''
     setFilterText(val)
-    updateData(model.list())
+    fetchData()
+  }
+  function handleEdit() {
+    // this will redirect to an edit page
   }
   if (show) {
     return (
