@@ -10,13 +10,19 @@ export default function TeamsList({ viewModel, model }) {
   const [data, updateData] = useState([])
   const [show, setShow] = useState(false)
   const [teamDelName, setTeamDelName] = useState('')
+  const [coachList, updateCoachList] = useState([])
   const [coachData, updateCoachData] = useState([])
 
   async function fetchData() {
     let teams = await model.list()
-    // let coaches = await model.lookup('coaches')
+    let coachList = await model.getLookup('coacheslist')
+    let coaches = await model.getLookup('coachesData')
+    console.log('teams: ', teams)
+    console.log('coachData: ', coaches)
+    console.log('coachList: ', coachList)
     updateData(teams)
-    // updateCoachData(coaches)
+    updateCoachList(coachList)
+    updateCoachData(coaches)
   }
 
   useEffect(() => {
@@ -74,6 +80,7 @@ export default function TeamsList({ viewModel, model }) {
             <TeamsTable
               teams={data}
               coaches={coachData}
+              coachList={coachList}
               sortCol={model.sortCol}
               sortDir={model.sortDir}
               viewModel={viewModel}

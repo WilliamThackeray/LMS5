@@ -1,9 +1,9 @@
 import TeamRow from "./teamRow.jsx"
 import TeamHeaderRow from "./teamHeaderRow.jsx"
 
-function TeamsTable({ teams, coaches, viewModel, sortCol, sortDir, onHandleDelete, onHandleSort, onHandleEdit }) {
-  const itemList = teams.map((team, coach) => {
-    return <TeamRow key={team.id} team={team} coach={coach} id={team.id} onHandleDelete={onHandleDelete} onHandleEdit={onHandleEdit} />
+function TeamsTable({ teams, coaches, coachList, viewModel, sortCol, sortDir, onHandleDelete, onHandleSort, onHandleEdit }) {
+  const itemList = teams.map((team) => {
+    return <TeamRow key={team.id} team={team} coaches={coaches} id={team.id} onHandleDelete={onHandleDelete} onHandleEdit={onHandleEdit} />
   })
   return (
     <table className={viewModel.list.tableClasses}>

@@ -30,8 +30,6 @@ export default class RestStorageService extends StorageService {
             const response = await fetch(url);
             this.model.data = await response.json();
 
-            console.log(this.model.data)
-           
             return this.model.data;
         }
         catch (err) {
