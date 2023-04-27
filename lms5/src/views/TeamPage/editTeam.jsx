@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-export default function AddTeam() {
+export default function EditTeam({team}) {
   return (
     <>
       {/* React Form Here */}
@@ -28,7 +28,7 @@ export default function AddTeam() {
           <Form.Control type='text' placeholder='Team name' />
         </Form.Group>
         <Button variant='primary'  type='submit'>
-          Add Team
+          Save Edits
         </Button>
       </Form>
     </>

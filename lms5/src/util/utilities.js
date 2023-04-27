@@ -10,6 +10,14 @@ export default class Utilities {
   //   return this.files[url]
   // }
 
+  getItemName(id, data) {
+    for (let item of data) {
+      if (item.id === parseInt(id)) {
+        return item.name
+      }
+    }
+  }
+
   cloneObject(obj) {
     return JSON.parse(JSON.stringify(obj))
   }

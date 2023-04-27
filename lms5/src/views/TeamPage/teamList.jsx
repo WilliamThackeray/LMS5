@@ -17,9 +17,6 @@ export default function TeamsList({ viewModel, model }) {
     let teams = await model.list()
     let coachList = await model.getLookup('coacheslist')
     let coaches = await model.getLookup('coachesData')
-    console.log('teams: ', teams)
-    console.log('coachData: ', coaches)
-    console.log('coachList: ', coachList)
     updateData(teams)
     updateCoachList(coachList)
     updateCoachData(coaches)
@@ -34,13 +31,13 @@ export default function TeamsList({ viewModel, model }) {
     model.reset()
     fetchData()
   }
-  function handleDelete(e) {
+  async function handleDelete(e) {
     let delID = e.target.closest('tr').id
-    let delName = model.list()[model.getItemIndex(delID)].name
-    model.delete(delID)
-    fetchData()
+    let delName = model.utils.getItemName(delID, model.data)
+    await model.delete(delID)
     setShow(true)
     setTeamDelName(delName)
+    fetchData()
   }
   function handleSort(col) {
     let curDir = model.sortDir
@@ -51,12 +48,12 @@ export default function TeamsList({ viewModel, model }) {
     model.sortCol = col
     // model.sort(model.sortCol, model.sortDir, true)
     // set model.options
-    model.options = {sortCol: model.sortCol, sortDir: model.sortDir}
+    model.options = { sortCol: model.sortCol, sortDir: model.sortDir }
     fetchData()
   }
   function handleFilterChange(val) {
     model.filterStr = val
-    model.filerCol = val ? model.sortCol:''
+    model.filerCol = val ? model.sortCol : ''
     setFilterText(val)
     fetchData()
   }
@@ -71,6 +68,11 @@ export default function TeamsList({ viewModel, model }) {
             <Alert variant='dark' onClose={() => setShow(false)} dismissible>
               <Alert.Heading>Team: {teamDelName} Deleted</Alert.Heading>
             </Alert>
+            <Link to={`/add-team`}>
+              <Button variant='primary' >
+                Add Team
+              </Button>
+            </Link>
             <SearchBar
               filterText={filterText}
               onFilterChange={handleFilterChange}
@@ -95,7 +97,7 @@ export default function TeamsList({ viewModel, model }) {
               }}
             >Reset</Button>
             <Link to={`/add-team/`}>
-              <Button 
+              <Button
                 variant='primary'
                 className='m-2'
               >Add Team</Button>
@@ -109,6 +111,11 @@ export default function TeamsList({ viewModel, model }) {
     data && coachData && <>
       <div className="col-sm-8 col-xs-12 m-2 p-3 bg-lightgray rounded">
         <div className="teamsContent">
+          <Link to={`/add-team`}>
+            <Button variant='primary' >
+              Add Team
+            </Button>
+          </Link>
           <SearchBar
             filterText={filterText}
             onFilterChange={handleFilterChange}
@@ -124,12 +131,12 @@ export default function TeamsList({ viewModel, model }) {
             onHandleDelete={handleDelete}
             onHandleSort={handleSort}
           ></TeamsTable>
-          <Button
+          {/* <Button
             variant='primary'
             onClick={(e) => {
               handleReset()
             }}
-          >Reset</Button>
+          >Reset</Button> */}
         </div>
       </div>
     </>
