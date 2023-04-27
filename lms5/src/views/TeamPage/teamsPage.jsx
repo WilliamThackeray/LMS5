@@ -15,5 +15,6 @@ export default function TeamsPage() {
           <TeamsList viewModel={AppViewModel} model={getApi()}></TeamsList>
         </div>
       </div>
-    </>)
+    </>
+  )
 }

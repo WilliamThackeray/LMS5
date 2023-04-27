@@ -1,4 +1,4 @@
-import Utils from '../util/utilities.js'
+import Utils from '../../util/utilities.js'
 
 export default class StorageService {
   "use Strict"
@@ -44,7 +44,7 @@ export default class StorageService {
       limit: 100,
       offset: null
     }
-    this.model.options = Object.assign(this.model.optinos, opts)
+    this.model.options = Object.assign(this.model.options, opts)
   }
 
   // Async CRUD functions
@@ -57,7 +57,7 @@ export default class StorageService {
   async getLookup(lookupName) { throw new Error('must be implemented in sub class') }
   
   // Cached Data Functions
-  getItem(id) { return this.model.data.find(el => el.id == id) }
+  getItem(id) { return this.model.data.find(el => el.id === id) }
 
   lookup(lookupName) { return this.lookups[lookupName] }
 

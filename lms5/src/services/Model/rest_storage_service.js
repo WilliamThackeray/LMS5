@@ -1,6 +1,6 @@
 /* RestStorageService Class template*/
 /* Use this template as a starter and complete the items that say 'TODO' */
-import StorageService from '../../../../src/services/Model/storage_service.js'
+import StorageService from './storage_service'
 import AppViewModel from '../Model/appViewModel.meta.js'
 
 export default class RestStorageService extends StorageService {
@@ -10,17 +10,17 @@ export default class RestStorageService extends StorageService {
         this.isLocal = false
     }
 
-    get apiName(){return this.entity;}
     get hostPrefix(){
         return `http://${this.host}`
     }
+    get apiName(){return this.entity;}
     get apiUrl(){
         return `${this.hostPrefix}/${this.apiName}`;
     }
     
     /* List function*/
     /* we'll give you this one */
-    async list(options = this.model.options) {
+    async list(options = this.options) {
 
         //note, this depends on the utility function getQueryString to create the query string
         // example:   ?SortCol=name&SortDir=asc&limit=5&offset=20
@@ -29,12 +29,14 @@ export default class RestStorageService extends StorageService {
         try {
             const response = await fetch(url);
             this.model.data = await response.json();
+
+            console.log(this.model.data)
            
             return this.model.data;
         }
-        catch (msg) {
-            console.log(msg);
-            throw (msg);
+        catch (err) {
+            console.log(err);
+            throw (err);
         }
     }
 

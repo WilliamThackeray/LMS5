@@ -2,22 +2,27 @@ import SearchBar from './searchBar.jsx'
 import TeamsTable from './teamTable.jsx'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert';
+import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 export default function TeamsList({ viewModel, model }) {
   const [filterText, setFilterText] = useState('')
-  const [data, updateData] = useState(model.list())
+  const [data, updateData] = useState([])
+  const [show, setShow] = useState(false)
+  const [teamDelName, setTeamDelName] = useState('')
+  const [coachData, updateCoachData] = useState([])
 
   async function fetchData() {
     let teams = await model.list()
+    // let coaches = await model.lookup('coaches')
     updateData(teams)
+    // updateCoachData(coaches)
   }
+
   useEffect(() => {
     fetchData()
-  },[])
+  }, [])
 
-  const [show, setShow] = useState(false)
-  const [teamDelName, setTeamDelName] = useState('')
 
   function handleReset() {
     model.reset()
@@ -38,12 +43,14 @@ export default function TeamsList({ viewModel, model }) {
     else model.sortDir = 'asc'
 
     model.sortCol = col
-    model.sort(model.sortCol, model.sortDir, true)
+    // model.sort(model.sortCol, model.sortDir, true)
+    // set model.options
+    model.options = {sortCol: model.sortCol, sortDir: model.sortDir}
     fetchData()
   }
   function handleFilterChange(val) {
     model.filterStr = val
-    model.filerCol = value ? model.sortCol:''
+    model.filerCol = val ? model.sortCol:''
     setFilterText(val)
     fetchData()
   }
@@ -52,7 +59,7 @@ export default function TeamsList({ viewModel, model }) {
   }
   if (show) {
     return (
-      <>
+      data && coachData && <>
         <div className="col-sm-8 col-xs-12 m-2 p-3 bg-lightgray rounded">
           <div className="teamsContent">
             <Alert variant='dark' onClose={() => setShow(false)} dismissible>
@@ -66,11 +73,13 @@ export default function TeamsList({ viewModel, model }) {
             ></SearchBar>
             <TeamsTable
               teams={data}
+              coaches={coachData}
               sortCol={model.sortCol}
               sortDir={model.sortDir}
               viewModel={viewModel}
               onHandleDelete={handleDelete}
               onHandleSort={handleSort}
+              onHandleEdit={handleEdit}
             ></TeamsTable>
             <Button
               variant='primary'
@@ -78,13 +87,19 @@ export default function TeamsList({ viewModel, model }) {
                 handleReset()
               }}
             >Reset</Button>
+            <Link to={`/add-team/`}>
+              <Button 
+                variant='primary'
+                className='m-2'
+              >Add Team</Button>
+            </Link>
           </div>
         </div>
       </>
     );
   }
   return (
-    <>
+    data && coachData && <>
       <div className="col-sm-8 col-xs-12 m-2 p-3 bg-lightgray rounded">
         <div className="teamsContent">
           <SearchBar
@@ -95,6 +110,7 @@ export default function TeamsList({ viewModel, model }) {
           ></SearchBar>
           <TeamsTable
             teams={data}
+            coaches={coachData}
             sortCol={model.sortCol}
             sortDir={model.sortDir}
             viewModel={viewModel}

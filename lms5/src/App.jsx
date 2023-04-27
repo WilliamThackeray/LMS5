@@ -13,6 +13,8 @@ function App() {
         <Route path='/' element={ <Layout title='' logo='./img/binhoL1.png'/> }>
           <Route index element={<HomePage/>} />
           <Route path='teams' element={ <TeamsPage/> } />
+          {/* <Route path='add-team' element={<AddTeam /> } /> */}
+          {/* <Route path='edit-team/:id' element={<EditTeam /> } /> */}
           <Route path='*' element={ <NoMatch/> } />
         </Route>
       </Routes>
