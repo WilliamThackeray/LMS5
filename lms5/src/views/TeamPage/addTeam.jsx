@@ -2,6 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useEffect, useState } from 'react'
 import { getApi } from '../../services/Model/rest_storage_service.js'
+import { Link } from 'react-router-dom'
 
 
 export default function AddTeam() {
@@ -71,15 +72,15 @@ export default function AddTeam() {
         <Form.Group controlId='formTeamCoach'>
           {/* coach */}
           <Form.Label>Coach Name</Form.Label>
-          <Form.Control type='text' placeholder='Coach Name' onChange={(e) => setCoachName(e.target.value)} required />
-          <Form.Control.Feedback type='invalid'>Coach Name Required</Form.Control.Feedback>
-          {/* <Form.Select required>
+          {/* <Form.Control type='text' placeholder='Coach Name' onChange={(e) => setCoachName(e.target.value)} required />
+          <Form.Control.Feedback type='invalid'>Coach Name Required</Form.Control.Feedback> */}
+          <Form.Select required aria-label="Select Coach">
             <option>Select Coach</option>
-            <option value={coaches[0].id}>{coaches[0].label}</option>
-            <option value={coaches[1].id}>{coaches[1].label}</option>
-            <option value={coaches[2].id}>{coaches[2].label}</option>
-            <option value={coaches[3].id}>{coaches[3].label}</option>
-          </Form.Select> */}
+            <option value={0}>William</option>
+            <option value={1}>Andrew</option>
+            <option value={2}>Noah</option>
+            <option value={3}>Eric</option>
+          </Form.Select>
         </Form.Group>
         <Form.Group controlId='formTeamNotes'>
           {/* notes */}
@@ -94,6 +95,11 @@ export default function AddTeam() {
         <Button variant='primary'  type='submit' >
           Add Team
         </Button>
+        <Link to={`/teams`}>
+          <Button variant='primary' type='button'>
+            Back
+          </Button>
+        </Link>
       </Form>
     </>
   )
