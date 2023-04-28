@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-export default function EditTeam({team}) {
+export default function EditTeam() {
   return (
     <>
       {/* React Form Here */}
