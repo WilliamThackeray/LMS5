@@ -39,11 +39,14 @@ export default function TeamsList({ viewModel, model }) {
     setTeamDelName(delName)
     fetchData()
   }
-  function handleSort(col) {
-    let curDir = model.sortDir
+  async function handleSort(col) {
+    let curDir = await model.sortDir
+    console.log('curDir: ', curDir)
 
     if (model.sortCol === col) model.sortDir = curDir === 'asc' ? 'desc' : 'asc'
     else model.sortDir = 'asc'
+
+    console.log('sortDir ', model.sortDir)
 
     model.sortCol = col
     // model.sort(model.sortCol, model.sortDir, true)

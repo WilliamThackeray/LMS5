@@ -11,15 +11,22 @@ export default function AddTeam() {
   const [motto, setMotto] = useState('')
   const [notes, setNotes] = useState('')
   const [model, setModel] = useState({})
+  const [coaches, setCoaches] = useState({})
   
   useEffect(() => {
     setModel(getApi())
+    getCoaches()
   }, [])
+
+  async function getCoaches() {
+    let coachList = await model.getLookup('coacheslist')
+    setCoaches(coachList)
+  }
 
   async function addTeam() {
     // FIXME: need to manually change the id's. fix this. But it does add to the database.
     let newTeam = {
-      id: 200,
+      id: 201,
       name: teamName,
       coach_id: 2,
       league_id: 1,
@@ -51,7 +58,7 @@ export default function AddTeam() {
   }
 
   return (
-    <>
+    coaches && <>
       {/* React Form Here */}
       {/* name, coachName, notes, motto */}
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -68,10 +75,10 @@ export default function AddTeam() {
           <Form.Control.Feedback type='invalid'>Coach Name Required</Form.Control.Feedback>
           {/* <Form.Select required>
             <option>Select Coach</option>
-            <option value={1}>opt</option>
-            <option value={1}>opt</option>
-            <option value={1}>opt</option>
-            <option value={1}>opt</option>
+            <option value={coaches[0].id}>{coaches[0].label}</option>
+            <option value={coaches[1].id}>{coaches[1].label}</option>
+            <option value={coaches[2].id}>{coaches[2].label}</option>
+            <option value={coaches[3].id}>{coaches[3].label}</option>
           </Form.Select> */}
         </Form.Group>
         <Form.Group controlId='formTeamNotes'>
