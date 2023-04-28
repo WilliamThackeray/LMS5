@@ -11,23 +11,25 @@ export default function AddTeam() {
   const [coachName, setCoachName] = useState('')
   const [motto, setMotto] = useState('')
   const [notes, setNotes] = useState('')
-  const [model, setModel] = useState({})
-  const [coaches, setCoaches] = useState({})
+  const [coaches, setCoaches] = useState()
+
+  let model = getApi()
   
   useEffect(() => {
-    setModel(getApi())
     getCoaches()
   }, [])
 
   async function getCoaches() {
     let coachList = await model.getLookup('coacheslist')
+    console.log(coachList)
     setCoaches(coachList)
   }
 
   async function addTeam() {
-    // FIXME: need to manually change the id's. fix this. But it does add to the database.
+    let numOfTeams = await model.list().length
+
     let newTeam = {
-      id: 201,
+      id: numOfTeams,
       name: teamName,
       coach_id: 2,
       league_id: 1,
@@ -41,21 +43,23 @@ export default function AddTeam() {
     event.preventDefault()
     event.stopPropagation()
     const form = event.currentTarget
-    if (form.checkValidity() === false) {
+    if (!form.checkValidity() === false) {
+      // create team in the database
+      console.log(teamName)
+      console.log(coachName)
+      console.log(notes)
+      console.log(motto)
+      
+      setValidated(true)
+      
+      // add to database
+      addTeam()
+      //redirect back to teams page.
+    } else {
       // bad validity
+      console.log('bad validity')
     }
-    // create team in the database
-    console.log(teamName)
-    console.log(coachName)
-    console.log(notes)
-    console.log(motto)
-
-    setValidated(true)
-
-    // add to database
-    addTeam()
-    //redirect back to teams page.
-
+    
   }
 
   return (
@@ -74,12 +78,16 @@ export default function AddTeam() {
           <Form.Label>Coach Name</Form.Label>
           {/* <Form.Control type='text' placeholder='Coach Name' onChange={(e) => setCoachName(e.target.value)} required />
           <Form.Control.Feedback type='invalid'>Coach Name Required</Form.Control.Feedback> */}
-          <Form.Select required aria-label="Select Coach">
+          <Form.Select required aria-label="Select Coach" onChange={(e) => setCoachName(e.target.value)}>
             <option>Select Coach</option>
-            <option value={0}>William</option>
-            <option value={1}>Andrew</option>
-            <option value={2}>Noah</option>
-            <option value={3}>Eric</option>
+            {/* <option value={0}>0</option>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option> */}
+            <option value={coaches[0].id}>{coaches[0].label}</option>
+            <option value={coaches[1].id}>{coaches[1].label}</option>
+            <option value={coaches[2].id}>{coaches[2].label}</option>
+            <option value={coaches[3].id}>{coaches[3].label}</option>
           </Form.Select>
         </Form.Group>
         <Form.Group controlId='formTeamNotes'>
