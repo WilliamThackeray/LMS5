@@ -6,13 +6,14 @@ import AppViewModel from '../../services/Model/appViewModel.meta.js';
 
 export default function TeamsPage() {
   // let localStorage = new LocalStorageService(AppViewModel.data, AppViewModel.list.entity)
+  let model = getApi()
 
   return (
     <>
       <div className="container-fluid main bg-gray">
         <div className="row d-flex">
           <TeamsAside></TeamsAside>
-          <TeamsList viewModel={AppViewModel} model={getApi()}></TeamsList>
+          <TeamsList viewModel={AppViewModel} model={model}></TeamsList>
         </div>
       </div>
     </>

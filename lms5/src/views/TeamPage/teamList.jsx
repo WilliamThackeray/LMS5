@@ -6,15 +6,21 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 export default function TeamsList({ viewModel, model }) {
-  const [filterText, setFilterText] = useState('')
-  const [data, updateData] = useState([])
+  const [data, updateData] = useState(null)
   const [show, setShow] = useState(false)
   const [teamDelName, setTeamDelName] = useState('')
   const [coachList, updateCoachList] = useState([])
   const [coachData, updateCoachData] = useState([])
+  const [options, setOptions] = useState()
+
+  const [filterText, setFilterText] = useState('')
+  const [filterCol, setFilterCol] = useState(model.filerCol)
+  const [filterStr, setFilterStr] = useState(model.filterStr)
+  const [sortCol, setSortCol] = useState(model.sortCol)
+  const [sortDir, setSortDir] = useState(model.sortDir)
 
   async function fetchData() {
-    let teams = await model.list()
+    let teams = await model.list(options)
     let coachList = await model.getLookup('coacheslist')
     let coaches = await model.getLookup('coachesData')
     updateData(teams)
@@ -23,8 +29,16 @@ export default function TeamsList({ viewModel, model }) {
   }
 
   useEffect(() => {
+    let opts = {sortCol: sortCol, sortDir: sortDir, filterStr: filterStr, filterCol: filterCol}
+    setOptions(opts)
+
+    model.list(options).then( (teams) => {
+      updateData(teams)
+    })
+    
     fetchData()
-  }, [])
+
+  }, [sortCol, sortDir, filterStr, filterCol])
 
 
   function handleReset() {
@@ -39,33 +53,47 @@ export default function TeamsList({ viewModel, model }) {
     setTeamDelName(delName)
     fetchData()
   }
-  async function handleSort(col) {
-    let curDir = await model.sortDir
-    console.log('curDir: ', curDir)
+  async function handleSort(newSortCol) {
+    // let curDir = await model.sortDir
+    // console.log('curDir: ', curDir)
 
-    if (model.sortCol === col) model.sortDir = curDir === 'asc' ? 'desc' : 'asc'
-    else model.sortDir = 'asc'
+    // if (model.sortCol === col) model.sortDir = curDir === 'asc' ? 'desc' : 'asc'
+    // else model.sortDir = 'asc'
 
-    console.log('sortDir ', model.sortDir)
+    // console.log('sortDir ', model.sortDir)
 
-    model.sortCol = col
-    // model.sort(model.sortCol, model.sortDir, true)
-    // set model.options
-    model.options = { sortCol: model.sortCol, sortDir: model.sortDir }
-    fetchData()
+    // model.sortCol = col
+    // // model.sort(model.sortCol, model.sortDir, true)
+    // // set model.options
+    // model.options = { sortCol: model.sortCol, sortDir: model.sortDir }
+    // fetchData()
+    let curDir = sortDir
+
+    if (sortCol === newSortCol) {
+      setSortDir(curDir === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortDir('asc')
+    }
+
+    setSortCol(newSortCol)
   }
   function handleFilterChange(val) {
-    model.filterStr = val
-    model.filerCol = val ? model.sortCol : ''
+    // model.filterStr = val
+    // model.filerCol = val ? model.sortCol : ''
+    // setFilterText(val)
+    // fetchData()
     setFilterText(val)
-    fetchData()
+    if (val === '' || val.length > 1) {
+      setFilterStr(val)
+      setFilterCol(val ? sortCol : '')
+    }
   }
   function handleEdit() {
     // this will redirect to an edit page
   }
   if (show) {
     return (
-      data && coachData && <>
+      data && coachData && (<>
         <div className="col-sm-8 col-xs-12 m-2 p-3 bg-lightgray rounded">
           <div className="teamsContent">
             <Alert variant='dark' onClose={() => setShow(false)} dismissible>
@@ -107,11 +135,11 @@ export default function TeamsList({ viewModel, model }) {
             </Link>
           </div>
         </div>
-      </>
+      </>)
     );
   }
   return (
-    data && coachData && <>
+    data && coachData && (<>
       <div className="col-sm-8 col-xs-12 m-2 p-3 bg-lightgray rounded">
         <div className="teamsContent">
           <Link to={`/add-team`}>
@@ -142,6 +170,6 @@ export default function TeamsList({ viewModel, model }) {
           >Reset</Button> */}
         </div>
       </div>
-    </>
+    </>)
   );
 } 

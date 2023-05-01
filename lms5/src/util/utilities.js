@@ -44,6 +44,8 @@ export default class Utilities {
     if (options.offset) {
       qstring += `offset=${options.offset}&`
     }
+    // cut off the last '&'
+    qstring = qstring.slice(0, qstring.length-1)
     return qstring
   }
 

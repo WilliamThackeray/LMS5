@@ -6,7 +6,7 @@ import { AiOutlineEdit } from 'react-icons/ai'
 export default function TeamRow({ team, coaches, id, onHandleDelete, onHandleEdit }) {
   function findcoach(coaches) {
     for (let coach of coaches) {
-      if (coach.team_id === id) {
+      if (coach.id === team.coach_id) {
         return coach
       }
     }
